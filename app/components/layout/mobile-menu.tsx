@@ -40,15 +40,18 @@ export function MobileMenu() {
           aria-describedby={undefined}
         >
           <Dialog.Title asChild>
-            <div className="px-4">Menu</div>
+            <div className="px-6 text-xl font-semibold tracking-wide">
+              MENU
+            </div>
           </Dialog.Title>
           <Dialog.Close asChild>
             <XIcon className="fixed top-4 right-4 h-5 w-5" />
           </Dialog.Close>
-          <div className="mt-4 border-line-subtle border-t" />
+          <div className="mt-4 border-t border-line-subtle" />
           <div className="py-2">
             <ScrollArea className="h-[calc(100vh-5rem)]">
-              <div className="space-y-1 px-4">
+              {/* 调整这里的布局 */}
+              <div className="flex flex-col gap-3 px-6 py-4 text-base font-medium tracking-wide">
                 {headerMenu.items.map((item) => (
                   <CollapsibleMenuItem
                     key={item.id}
@@ -70,7 +73,10 @@ function CollapsibleMenuItem({ item }: { item: SingleMenuItem }) {
   if (!items?.length) {
     return (
       <Dialog.Close asChild>
-        <Link to={to} className="py-3">
+        <Link
+          to={to}
+          className="block w-full py-3 border-b border-gray-200 hover:text-gray-700 transition-colors"
+        >
           {title}
         </Link>
       </Dialog.Close>
@@ -82,13 +88,13 @@ function CollapsibleMenuItem({ item }: { item: SingleMenuItem }) {
       <Collapsible.Trigger asChild>
         <button
           type="button"
-          className='flex w-full items-center justify-between gap-4 py-3 data-[state="open"]:[&>svg]:rotate-90'
+          className='flex w-full items-center justify-between gap-4 py-3 font-semibold uppercase data-[state="open"]:[&>svg]:rotate-90'
         >
-          <span className="uppercase">{title}</span>
-          <CaretRightIcon className="h-4 w-4" />
+          <span>{title}</span>
+          <CaretRightIcon className="h-4 w-4 transition-transform" />
         </button>
       </Collapsible.Trigger>
-      <Collapsible.Content className="border-gray-300 border-l pl-4">
+      <Collapsible.Content className="ml-4 border-l border-gray-300 pl-4 text-sm font-normal space-y-2">
         {items.map((childItem) => (
           <CollapsibleMenuItem key={childItem.id} item={childItem} />
         ))}
