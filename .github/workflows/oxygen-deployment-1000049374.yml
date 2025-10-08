@@ -25,4 +25,5 @@ jobs:
         env:
           SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
         run: |
-          npx shopify hydrogen deploy
+          npx shopify@latest hydrogen deploy
+
