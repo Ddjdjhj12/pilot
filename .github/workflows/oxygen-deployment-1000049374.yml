@@ -23,6 +23,6 @@ jobs:
 
       # 🚀 使用 CLI 部署，不再引用不存在的 Action 仓库
       - name: Build and Publish to Oxygen
-        run: npx shopify@latest hydrogen deploy \
-             --storefront-id=1000049374 \
-             --token=${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+        run: npx shopify hydrogen deploy \
+      --deployment-token=${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+
