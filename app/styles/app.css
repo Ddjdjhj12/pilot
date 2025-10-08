@@ -431,3 +431,63 @@
 /* .animated-scope [data-motion] {
   opacity: 0;
 } */
+
+/* ===== 修复手机端导航栏高度与LOGO垂直居中 ===== */
+@media (max-width: 767px) {
+  header[role="banner"],
+  header.header,
+  .header,
+  .header__wrapper {
+    height: 60px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .header__logo img,
+  .site-logo img,
+  [class*="logo"] img {
+    max-height: 36px !important;
+    object-fit: contain;
+    display: block;
+  }
+
+  .header__icons,
+  .header__actions,
+  [class*="header"] [class*="icons"] {
+    align-items: center !important;
+  }
+}
+
+/* ===== 手机菜单修复：分行 + 增加间距 ===== */
+@media (max-width: 767px) {
+  .menu-drawer,
+  .mobile-menu,
+  .menu-drawer__menu,
+  .menu__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 16px;
+  }
+
+  .menu__item a,
+  .menu-drawer__menu-item a,
+  .mobile-menu a {
+    font-size: 18px !important;
+    line-height: 1.8 !important;
+    color: #222 !important;
+  }
+
+  .menu__item,
+  .menu-drawer__menu-item {
+    width: 100%;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding-bottom: 6px;
+  }
+
+  .menu-drawer {
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(6px);
+  }
+}
