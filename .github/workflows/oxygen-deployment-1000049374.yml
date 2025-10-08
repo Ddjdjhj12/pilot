@@ -22,6 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build and Publish to Oxygen
+        env:
+          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
         run: |
-          npx shopify hydrogen deploy \
-            --deployment-token=${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+          npx shopify hydrogen deploy
