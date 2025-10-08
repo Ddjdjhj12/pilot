@@ -10,20 +10,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Install deps
+      - name: Install dependencies
         run: npm ci
 
-      # ✅ 使用官方 Action，显式带上 token 和 storefront_id
-      - name: Build & Publish to Oxygen
-        uses: Shopify/oxygen-deployment@v3
-        with:
-          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
-          storefront_id: Storefront 1000049374
+      # 🚀 使用 CLI 部署，不再引用不存在的 Action 仓库
+      - name: Build and Publish to Oxygen
+        run: npx shopify@latest hydrogen deploy \
+             --storefront-id=1000049374 \
+             --token=${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
