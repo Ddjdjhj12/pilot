@@ -21,9 +21,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 🚀 使用 CLI 部署，不再引用不存在的 Action 仓库
-           - name: Build and Publish to Oxygen
+      - name: Build and Publish to Oxygen
         run: |
           npx shopify hydrogen deploy \
             --deployment-token=${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
-
