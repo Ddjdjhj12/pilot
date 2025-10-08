@@ -1,42 +1,29 @@
-name: Storefront 1000049374
-on: [push]
+name: Storefront 1000049374 (Production)
 
-permissions:
-  contents: read
-  deployments: write
+on:
+  push:
+    branches: [ main ]
 
 jobs:
   deploy:
     name: Deploy to Oxygen
-    timeout-minutes: 30
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Setup node.js
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
-          check-latest: true
+          node-version: 20
 
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-
-      - name: Install dependencies
+      - name: Install deps
         run: npm ci
 
-      - name: Build and Publish to Oxygen
-        run: npx shopify hydrogen deploy --token ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
-
-        env:
-          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000049374 }}
+      # ✅ 使用官方 Action，显式带上 token 和 storefront_id
+      - name: Build & Publish to Oxygen
+        uses: Shopify/oxygen-deployment@v3
+        with:
+          oxygen_deployment_token: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
+          storefront_id: Storefront 1000049374
