@@ -1,4 +1,4 @@
-// Supports weights 400-700 
+// Supports weights 400-700  
 import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
@@ -38,18 +38,12 @@ import { GlobalStyle } from "./weaverse/style";
 
 export type RootLoader = typeof loader;
 
-// ✅ 新增 favicon 引用（改用 PNG 图标）
+// ✅ favicon + 预连接优化
 export const links: LinksFunction = () => {
   return [
-    {
-      rel: "preconnect",
-      href: "https://cdn.shopify.com",
-    },
-    {
-      rel: "preconnect",
-      href: "https://shop.app",
-    },
-    { rel: "icon", type: "image/png", href: "/favicon1.png" }, // ← 修改为 PNG
+    { rel: "preconnect", href: "https://cdn.shopify.com" },
+    { rel: "preconnect", href: "https://shop.app" },
+    { rel: "icon", type: "image/png", href: "/favicon1.png" },
   ];
 };
 
@@ -63,17 +57,14 @@ export async function loader(args: LoaderFunctionArgs) {
   };
 }
 
-// ✅ 优化 SEO 标题与描述（可中英文切换）
+// ✅ 优化 SEO 默认标题与描述
 export const meta = ({ data }: MetaArgs<typeof loader>) => {
-  // 调用 Hydrogen 默认 SEO
   const baseMeta = getSeoMeta(data?.seo as SeoConfig) || [];
 
-  // 定义品牌默认标题与描述
   const defaultTitle = "Entropy Bright – Tiffany Lamps & Vintage Lighting";
   const defaultDescription =
     "Discover handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
 
-  // 处理默认 SEO 值
   const processedMeta = baseMeta.map((item: any) => {
     if (item.title && item.title.includes("Weaverse")) {
       return { ...item, title: defaultTitle };
@@ -84,7 +75,6 @@ export const meta = ({ data }: MetaArgs<typeof loader>) => {
     return item;
   });
 
-  // 如果没有标题则添加一个默认的
   const hasTitle = processedMeta.some((m: any) => m.title);
   if (!hasTitle) {
     processedMeta.push({ title: defaultTitle });
@@ -133,34 +123,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={styles} />
 
-        {/* ✅ 新增 favicon 链接 */}
+        {/* ✅ favicon */}
         <link rel="icon" type="image/png" href="/favicon1.png" />
 
         {/* ✅ 自动 SEO meta */}
         <Meta />
         <Links />
         <GlobalStyle />
-        {/* Judge.me Reviews script (for Hydrogen & Weaverse) */}
-<script
-  async
-  type="text/javascript"
-  src="https://cdn.judge.me/shopify_v2.js"
-  id="judgeme_shopify_script"
-></script>
 
-<script
-  async
-  type="text/javascript"
-  dangerouslySetInnerHTML={{
-    __html: `
-      window.jdgm || (window.jdgm = {});
-      window.jdgm.SHOP_DOMAIN = "${entropybright-3294221b614bdb3e2137.o2.myshopify.dev
-}";
-    `,
-  }}
-></script>
+        {/* ✅ Judge.me 评论脚本 */}
+        <script
+          async
+          type="text/javascript"
+          src="https://cdn.judge.me/shopify_v2.js"
+          id="judgeme_shopify_script"
+        ></script>
 
+        <script
+          async
+          type="text/javascript"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.jdgm || (window.jdgm = {});
+              window.jdgm.SHOP_DOMAIN = "entropybright-3294221b614bdb3e2137.o2.myshopify.dev";
+            `,
+          }}
+        ></script>
       </head>
+
       <body
         style={
           {
@@ -181,7 +171,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 className="flex min-h-screen flex-col"
                 key={`${locale.language}-${locale.country}`}
               >
-                <div className="">
+                <div>
                   <a href="#mainContent" className="sr-only">
                     Skip to content
                   </a>
