@@ -1,4 +1,4 @@
-// Supports weights 400-700
+// Supports weights 400-700 
 import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
@@ -38,6 +38,7 @@ import { GlobalStyle } from "./weaverse/style";
 
 export type RootLoader = typeof loader;
 
+// ✅ 新增 favicon 引用（改用 PNG 图标）
 export const links: LinksFunction = () => {
   return [
     {
@@ -48,15 +49,12 @@ export const links: LinksFunction = () => {
       rel: "preconnect",
       href: "https://shop.app",
     },
-    { rel: "icon", type: "image/svg+xml", href: "/favicon.ico" },
+    { rel: "icon", type: "image/png", href: "/favicon.png" }, // ← 修改为 PNG
   ];
 };
 
 export async function loader(args: LoaderFunctionArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
 
   return {
@@ -65,8 +63,26 @@ export async function loader(args: LoaderFunctionArgs) {
   };
 }
 
+// ✅ 优化 SEO 标题与描述（可中英文切换）
 export const meta = ({ data }: MetaArgs<typeof loader>) => {
-  return getSeoMeta(data?.seo as SeoConfig);
+  const baseMeta = getSeoMeta(data?.seo as SeoConfig);
+
+  // 如果 Shopify SEO 未返回标题，则使用默认品牌标题
+  const defaultTitle = "Entropy Bright – Tiffany Lamps & Artistic Lighting";
+  const defaultDescription =
+    "Illuminate your space with handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
+
+  const mergedMeta = [
+    ...baseMeta,
+    {
+      title: baseMeta?.[0]?.title || defaultTitle,
+      description:
+        baseMeta?.find((m) => m.name === "description")?.content ||
+        defaultDescription,
+    },
+  ];
+
+  return mergedMeta;
 };
 
 function App() {
@@ -78,7 +94,6 @@ export function ErrorBoundary({ error }: { error: Error }) {
   const isRouteError = isRouteErrorResponse(routeError);
 
   let pageType = "page";
-
   if (isRouteError && routeError.status === 404) {
     pageType = routeError.data || pageType;
   }
@@ -109,6 +124,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={styles} />
+
+        {/* ✅ 新增 favicon 链接 */}
+        <link rel="icon" type="image/png" href="/favicon.png" />
+
+        {/* ✅ 自动 SEO meta */}
         <Meta />
         <Links />
         <GlobalStyle />
