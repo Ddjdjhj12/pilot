@@ -114,28 +114,33 @@ function CollectionItems(props: CollectionItemsData & HydrogenComponentProps) {
           className="group group/overlay relative w-[67vw] md:w-auto"
           data-motion="slide-in"
         >
-          {collection?.image && (
-            <div
-              className={clsx("overflow-hidden", variants({ borderRadius }))}
-              style={{
-                aspectRatio: calculateAspectRatio(
-                  collection?.image || {},
-                  imageAspectRatio,
-                ),
-              }}
-            >
-              <Image
-                data={collection.image}
-                width={collection.image.width || 600}
-                height={collection.image.height || 400}
-                sizes="(max-width: 32em) 100vw, 45vw"
-                className={clsx([
-                  "transition-all duration-300",
-                  "scale-100 will-change-transform group-hover:scale-[1.05]",
-                ])}
-              />
-            </div>
-          )}
+          const customImage = collection.settings?.customImage;
+const customLink = collection.settings?.customLink;
+const imageData = customImage || collection.image;
+
+...
+
+{imageData && (
+  <div
+    className={clsx("overflow-hidden", variants({ borderRadius }))}
+    style={{
+      aspectRatio: calculateAspectRatio(imageData || {}, imageAspectRatio),
+    }}
+  >
+    <Image
+      data={imageData}
+      width={imageData.width || 600}
+      height={imageData.height || 400}
+      sizes="(max-width: 32em) 100vw, 45vw"
+      className={clsx([
+        "transition-all duration-300",
+        "scale-100 will-change-transform group-hover:scale-[1.05]",
+      ])}
+    />
+  </div>
+)}
+
+          
           {contentPosition === "over" && (
             <Overlay
               enableOverlay={enableOverlay}
@@ -162,18 +167,19 @@ function CollectionItems(props: CollectionItemsData & HydrogenComponentProps) {
                 <h6>{collection.title}</h6>
               )}
               {contentPosition === "over" && buttonText && (
-                <Link
-                  to={`/collections/${collection.handle}`}
-                  variant="custom"
-                  backgroundColor={backgroundColor}
-                  textColor={textColor}
-                  borderColor={borderColor}
-                  backgroundColorHover={backgroundColorHover}
-                  textColorHover={textColorHover}
-                  borderColorHover={borderColorHover}
-                >
-                  {buttonText}
-                </Link>
+               <Link
+                 to={customLink || `/collections/${collection.handle}`}
+                 variant="custom"
+                 backgroundColor={backgroundColor}
+                 textColor={textColor}
+                 borderColor={borderColor}
+                 backgroundColorHover={backgroundColorHover}
+                 textColorHover={textColorHover}
+                 borderColorHover={borderColorHover}
+>
+  {buttonText}
+</Link>
+
               )}
             </div>
           </div>
@@ -324,6 +330,21 @@ export const schema = createSchema({
           condition: (data: CollectionItemsData) =>
             data.contentPosition === "over",
         })),
+        {
+  type: "heading",
+  label: "Custom fields",
+},
+{
+  type: "image_picker",
+  name: "customImage",
+  label: "Custom image (override default)",
+},
+{
+  type: "url",
+  name: "customLink",
+  label: "Custom link (override default collection link)",
+},
+
       ],
     },
   ],
