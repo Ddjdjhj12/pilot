@@ -93,25 +93,6 @@ export const meta = ({ data }: MetaArgs<typeof loader>) => {
   return processedMeta;
 };
 
-
-  // 如果 Shopify SEO 未返回标题，则使用默认品牌标题
-  const defaultTitle = "Entropy Bright – Tiffany Lamps & Artistic Lighting";
-  const defaultDescription =
-    "Illuminate your space with handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
-
-  const mergedMeta = [
-    ...baseMeta,
-    {
-      title: baseMeta?.[0]?.title || defaultTitle,
-      description:
-        baseMeta?.find((m) => m.name === "description")?.content ||
-        defaultDescription,
-    },
-  ];
-
-  return mergedMeta;
-};
-
 function App() {
   return <Outlet />;
 }
