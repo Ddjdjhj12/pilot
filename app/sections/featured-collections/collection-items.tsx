@@ -63,6 +63,8 @@ interface CollectionItemsData
   imageAspectRatio: ImageAspectRatio;
   collectionNameColor: string;
   buttonText: string;
+  customImage?: any;
+  customLink?: string;
   ref?: React.Ref<HTMLDivElement>;
 }
 
@@ -95,6 +97,7 @@ function CollectionItems(props: CollectionItemsData & HydrogenComponentProps) {
   if (!collections?.length) {
     collections = new Array(Number(gridSize)).fill(COLLECTION_PLACEHOLDER);
   }
+
   return (
     <div
       ref={scope}
@@ -108,83 +111,84 @@ function CollectionItems(props: CollectionItemsData & HydrogenComponentProps) {
         variants({ gridSize, gap }),
       )}
     >
-      {collections.map((collection, ind) => (
-        <div
-          key={collection.id + ind}
-          className="group group/overlay relative w-[67vw] md:w-auto"
-          data-motion="slide-in"
-        >
-          const customImage = collection.settings?.customImage;
-const customLink = collection.settings?.customLink;
-const imageData = customImage || collection.image;
+      {collections.map((collection, ind) => {
+        // ✅ 优先使用自定义图片和链接
+        const customImage = (collection as any).settings?.customImage;
+        const customLink = (collection as any).settings?.customLink;
+        const imageData = customImage || collection.image;
 
-...
-
-{imageData && (
-  <div
-    className={clsx("overflow-hidden", variants({ borderRadius }))}
-    style={{
-      aspectRatio: calculateAspectRatio(imageData || {}, imageAspectRatio),
-    }}
-  >
-    <Image
-      data={imageData}
-      width={imageData.width || 600}
-      height={imageData.height || 400}
-      sizes="(max-width: 32em) 100vw, 45vw"
-      className={clsx([
-        "transition-all duration-300",
-        "scale-100 will-change-transform group-hover:scale-[1.05]",
-      ])}
-    />
-  </div>
-)}
-
-          
-          {contentPosition === "over" && (
-            <Overlay
-              enableOverlay={enableOverlay}
-              overlayColor={overlayColor}
-              overlayColorHover={overlayColorHover}
-              overlayOpacity={overlayOpacity}
-              className={clsx("z-0", variants({ borderRadius }))}
-            />
-          )}
-          <div className={clsx("items-center", variants({ contentPosition }))}>
-            <div
-              style={
-                { "--col-name-color": collectionNameColor } as CSSProperties
-              }
-              className={clsx(
-                contentPosition === "over"
-                  ? "space-y-4 px-4 py-16 text-center text-(--col-name-color) xl:space-y-7"
-                  : "py-4",
-              )}
-            >
-              {contentPosition === "over" ? (
-                <h5>{collection.title}</h5>
-              ) : (
-                <h6>{collection.title}</h6>
-              )}
-              {contentPosition === "over" && buttonText && (
-               <Link
-                 to={customLink || `/collections/${collection.handle}`}
-                 variant="custom"
-                 backgroundColor={backgroundColor}
-                 textColor={textColor}
-                 borderColor={borderColor}
-                 backgroundColorHover={backgroundColorHover}
-                 textColorHover={textColorHover}
-                 borderColorHover={borderColorHover}
->
-  {buttonText}
-</Link>
-
-              )}
+        return (
+          <div
+            key={collection.id + ind}
+            className="group group/overlay relative w-[67vw] md:w-auto"
+            data-motion="slide-in"
+          >
+            {imageData && (
+              <div
+                className={clsx("overflow-hidden", variants({ borderRadius }))}
+                style={{
+                  aspectRatio: calculateAspectRatio(
+                    imageData || {},
+                    imageAspectRatio,
+                  ),
+                }}
+              >
+                <Image
+                  data={imageData}
+                  width={imageData.width || 600}
+                  height={imageData.height || 400}
+                  sizes="(max-width: 32em) 100vw, 45vw"
+                  className={clsx([
+                    "transition-all duration-300",
+                    "scale-100 will-change-transform group-hover:scale-[1.05]",
+                  ])}
+                />
+              </div>
+            )}
+            {contentPosition === "over" && (
+              <Overlay
+                enableOverlay={enableOverlay}
+                overlayColor={overlayColor}
+                overlayColorHover={overlayColorHover}
+                overlayOpacity={overlayOpacity}
+                className={clsx("z-0", variants({ borderRadius }))}
+              />
+            )}
+            <div className={clsx("items-center", variants({ contentPosition }))}>
+              <div
+                style={
+                  { "--col-name-color": collectionNameColor } as CSSProperties
+                }
+                className={clsx(
+                  contentPosition === "over"
+                    ? "space-y-4 px-4 py-16 text-center text-(--col-name-color) xl:space-y-7"
+                    : "py-4",
+                )}
+              >
+                {contentPosition === "over" ? (
+                  <h5>{collection.title}</h5>
+                ) : (
+                  <h6>{collection.title}</h6>
+                )}
+                {contentPosition === "over" && buttonText && (
+                  <Link
+                    to={customLink || `/collections/${collection.handle}`}
+                    variant="custom"
+                    backgroundColor={backgroundColor}
+                    textColor={textColor}
+                    borderColor={borderColor}
+                    backgroundColorHover={backgroundColorHover}
+                    textColorHover={textColorHover}
+                    borderColorHover={borderColorHover}
+                  >
+                    {buttonText}
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -260,8 +264,6 @@ export const schema = createSchema({
               { value: "16/9", label: "Widescreen (16/9)" },
             ],
           },
-          helpText:
-            'Learn more about image <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/aspect-ratio" target="_blank" rel="noopener noreferrer">aspect ratio</a> property.',
         },
         {
           type: "range",
@@ -330,21 +332,25 @@ export const schema = createSchema({
           condition: (data: CollectionItemsData) =>
             data.contentPosition === "over",
         })),
+        // ✅ Custom fields start
         {
-  type: "heading",
-  label: "Custom fields",
-},
-{
-  type: "image_picker",
-  name: "customImage",
-  label: "Custom image (override default)",
-},
-{
-  type: "url",
-  name: "customLink",
-  label: "Custom link (override default collection link)",
-},
-
+          type: "heading",
+          label: "Custom fields",
+        },
+        {
+          type: "image_picker",
+          name: "customImage",
+          label: "Custom image (override default)",
+          helpText:
+            "Upload a custom image to replace the default collection cover image.",
+        },
+        {
+          type: "url",
+          name: "customLink",
+          label: "Custom link (override default collection link)",
+          helpText: "Add a custom URL to override the default collection link.",
+        },
+        // ✅ Custom fields end
       ],
     },
   ],
