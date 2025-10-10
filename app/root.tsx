@@ -49,7 +49,7 @@ export const links: LinksFunction = () => {
       rel: "preconnect",
       href: "https://shop.app",
     },
-    { rel: "icon", type: "image/png", href: "/favicon.png" }, // ← 修改为 PNG
+    { rel: "icon", type: "image/png", href: "/favicon1.png" }, // ← 修改为 PNG
   ];
 };
 
@@ -126,7 +126,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <link rel="stylesheet" href={styles} />
 
         {/* ✅ 新增 favicon 链接 */}
-        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="icon" type="image/png" href="/favicon1.png" />
 
         {/* ✅ 自动 SEO meta */}
         <Meta />
