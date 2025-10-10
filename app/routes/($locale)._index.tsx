@@ -43,9 +43,35 @@ export async function loader(args: LoaderFunctionArgs) {
   };
 }
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return getSeoMeta(data?.seo as SeoConfig);
+import type { MetaArgs } from "@shopify/remix-oxygen";
+import type { SeoConfig } from "@shopify/hydrogen";
+import { getSeoMeta } from "@shopify/hydrogen";
+
+export const meta = ({ data }: MetaArgs<typeof loader>) => {
+  const baseMeta = getSeoMeta(data?.seo as SeoConfig) || [];
+
+  const defaultTitle = "Entropy Bright – Tiffany Lamps & Vintage Lighting";
+  const defaultDescription =
+    "Discover handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
+
+  const processedMeta = baseMeta.map((item: any) => {
+    if (item.title && item.title.includes("Weaverse")) {
+      return { ...item, title: defaultTitle };
+    }
+    if (item.name === "description" && !item.content) {
+      return { ...item, content: defaultDescription };
+    }
+    return item;
+  });
+
+  const hasTitle = processedMeta.some((m: any) => m.title);
+  if (!hasTitle) {
+    processedMeta.push({ title: defaultTitle });
+  }
+
+  return processedMeta;
 };
+
 export default function Homepage() {
   return <WeaverseContent />;
 }
