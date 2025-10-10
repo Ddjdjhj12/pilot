@@ -146,6 +146,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               // ⚙️ 替换为你 Hydrogen 连接的商店域名（Shopify Dev 或自定义）
               window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
               window.jdgm.PLATFORM = "hydrogen";
+              window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
             `,
           }}
         ></script>
