@@ -1,12 +1,10 @@
-import type { SeoConfig } from "@shopify/hydrogen";
-import { AnalyticsPageType, getSeoMeta } from "@shopify/hydrogen";
 import type { LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import type { PageType } from "@weaverse/hydrogen";
-import type { MetaFunction } from "react-router";
 import type { ShopQuery } from "storefront-api.generated";
 import { routeHeaders } from "~/utils/cache";
 import { seoPayload } from "~/utils/seo.server";
 import { validateWeaverseData, WeaverseContent } from "~/weaverse";
+import { AnalyticsPageType } from "@shopify/hydrogen"; // 确保定义 pageType
 
 export const headers = routeHeaders;
 
@@ -21,7 +19,7 @@ export async function loader(args: LoaderFunctionArgs) {
     type = "CUSTOM";
   }
 
-  // Calculate seo payload synchronously
+  // Calculate SEO payload synchronously
   const seo = seoPayload.home();
 
   // Load async data in parallel for better performance
@@ -43,9 +41,10 @@ export async function loader(args: LoaderFunctionArgs) {
   };
 }
 
+// ✅ 移到这里，且只导入一次（避免重复）
 import type { MetaArgs } from "@shopify/remix-oxygen";
-import type { SeoConfig } from "@shopify/hydrogen";
 import { getSeoMeta } from "@shopify/hydrogen";
+import type { SeoConfig } from "@shopify/hydrogen";
 
 export const meta = ({ data }: MetaArgs<typeof loader>) => {
   const baseMeta = getSeoMeta(data?.seo as SeoConfig) || [];
