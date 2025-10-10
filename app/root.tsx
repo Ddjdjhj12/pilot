@@ -73,8 +73,8 @@ export const meta = ({ data }: MetaArgs<typeof loader>) => {
   const defaultDescription =
     "Discover handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
 
-  // 查找现有 title，如果含 “Weaverse” 就强制替换
-  const processedMeta = baseMeta.map((item) => {
+  // 处理默认 SEO 值
+  const processedMeta = baseMeta.map((item: any) => {
     if (item.title && item.title.includes("Weaverse")) {
       return { ...item, title: defaultTitle };
     }
@@ -84,14 +84,15 @@ export const meta = ({ data }: MetaArgs<typeof loader>) => {
     return item;
   });
 
-  // 若 meta 中不存在 title，则添加
-  const hasTitle = processedMeta.some((m) => m.title);
+  // 如果没有标题则添加一个默认的
+  const hasTitle = processedMeta.some((m: any) => m.title);
   if (!hasTitle) {
     processedMeta.push({ title: defaultTitle });
   }
 
   return processedMeta;
 };
+
 
   // 如果 Shopify SEO 未返回标题，则使用默认品牌标题
   const defaultTitle = "Entropy Bright – Tiffany Lamps & Artistic Lighting";
