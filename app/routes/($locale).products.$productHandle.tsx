@@ -130,39 +130,24 @@ export default function Product() {
   }, [selectedVariant?.selectedOptions, combinedListing]);
 
   return (
-  <>
-    {/* Weaverse 内容渲染（包含商品主模块） */}
-    <WeaverseContent />
-
-    {/* 🔹 在 "You may also like" 上方插入 Judge.me 评论组件 */}
-    <div
-      id="judgeme_product_reviews"
-      style={{
-        marginTop: "40px",
-        marginBottom: "40px",
-        width: "100%",
-        display: "flex",
-        justifyContent: "center",
-      }}
-    ></div>
-
-    {/* 保持 Hydrogen 原有埋点逻辑 */}
-    {selectedVariant && (
-      <Analytics.ProductView
-        data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: selectedVariant?.price.amount || "0",
-              vendor: product.vendor,
-              variantId: selectedVariant?.id || "",
-              variantTitle: selectedVariant?.title || "",
-              quantity: 1,
-            },
-          ],
-        }}
-      />
-    )}
-  </>
-);
+    <>
+      <WeaverseContent />
+      {selectedVariant && (
+        <Analytics.ProductView
+          data={{
+            products: [
+              {
+                id: product.id,
+                title: product.title,
+                price: selectedVariant?.price.amount || "0",
+                vendor: product.vendor,
+                variantId: selectedVariant?.id || "",
+                variantTitle: selectedVariant?.title || "",
+                quantity: 1,
+              },
+            ],
+          }}
+        />
+      )}
+    </>
+  );
