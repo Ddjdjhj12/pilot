@@ -140,6 +140,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <GlobalStyle />
+        {/* Judge.me Review Script */}
+<script
+  async
+  type="text/javascript"
+  src="https://cdn.judge.me/shopify_v2.js"
+></script>
+
       </head>
       <body
         style={
