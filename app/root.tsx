@@ -140,11 +140,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <GlobalStyle />
-        {/* Judge.me Review Script */}
+        {/* Judge.me Reviews script (for Hydrogen & Weaverse) */}
 <script
   async
   type="text/javascript"
   src="https://cdn.judge.me/shopify_v2.js"
+  id="judgeme_shopify_script"
+></script>
+
+<script
+  async
+  type="text/javascript"
+  dangerouslySetInnerHTML={{
+    __html: `
+      window.jdgm || (window.jdgm = {});
+      window.jdgm.SHOP_DOMAIN = "${entropybright-3294221b614bdb3e2137.o2.myshopify.dev
+}";
+    `,
+  }}
 ></script>
 
       </head>
