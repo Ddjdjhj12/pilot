@@ -65,7 +65,33 @@ export async function loader(args: LoaderFunctionArgs) {
 
 // ✅ 优化 SEO 标题与描述（可中英文切换）
 export const meta = ({ data }: MetaArgs<typeof loader>) => {
-  const baseMeta = getSeoMeta(data?.seo as SeoConfig);
+  // 调用 Hydrogen 默认 SEO
+  const baseMeta = getSeoMeta(data?.seo as SeoConfig) || [];
+
+  // 定义品牌默认标题与描述
+  const defaultTitle = "Entropy Bright – Tiffany Lamps & Vintage Lighting";
+  const defaultDescription =
+    "Discover handcrafted Tiffany lamps and vintage lighting by Entropy Bright. Artistic illumination for timeless interiors.";
+
+  // 查找现有 title，如果含 “Weaverse” 就强制替换
+  const processedMeta = baseMeta.map((item) => {
+    if (item.title && item.title.includes("Weaverse")) {
+      return { ...item, title: defaultTitle };
+    }
+    if (item.name === "description" && !item.content) {
+      return { ...item, content: defaultDescription };
+    }
+    return item;
+  });
+
+  // 若 meta 中不存在 title，则添加
+  const hasTitle = processedMeta.some((m) => m.title);
+  if (!hasTitle) {
+    processedMeta.push({ title: defaultTitle });
+  }
+
+  return processedMeta;
+};
 
   // 如果 Shopify SEO 未返回标题，则使用默认品牌标题
   const defaultTitle = "Entropy Bright – Tiffany Lamps & Artistic Lighting";
