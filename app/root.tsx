@@ -50,7 +50,6 @@ export const links: LinksFunction = () => {
 export async function loader(args: LoaderFunctionArgs) {
   const deferredData = loadDeferredData(args);
   const criticalData = await loadCriticalData(args);
-
   return {
     ...deferredData,
     ...criticalData,
@@ -131,21 +130,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
         <GlobalStyle />
 
-        {/* ✅ Judge.me 评论脚本 */}
+        {/* ✅ Judge.me 评论系统全局脚本 */}
         <script
           async
+          id="judgeme_shopify_script"
           type="text/javascript"
           src="https://cdn.judge.me/shopify_v2.js"
-          id="judgeme_shopify_script"
         ></script>
 
         <script
-          async
           type="text/javascript"
           dangerouslySetInnerHTML={{
             __html: `
-              window.jdgm || (window.jdgm = {});
+              window.jdgm = window.jdgm || {};
+              // ⚙️ 替换为你 Hydrogen 连接的商店域名（Shopify Dev 或自定义）
               window.jdgm.SHOP_DOMAIN = "entropybright-3294221b614bdb3e2137.o2.myshopify.dev";
+              window.jdgm.PLATFORM = "hydrogen";
             `,
           }}
         ></script>
