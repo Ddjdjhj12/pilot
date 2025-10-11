@@ -1,4 +1,4 @@
-// Supports weights 400-700  
+// Supports weights 400-700
 import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
@@ -121,43 +121,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={styles} />
-
-        {/* ✅ favicon */}
         <link rel="icon" type="image/png" href="/favicon1.png" />
 
-           {/* ✅ 自动 SEO meta */}
-      <Meta />
-      <Links />
-      <GlobalStyle />
-    </head>
-    <body>
-      <Outlet />
-      <ScrollRestoration />
-      <Scripts />
-      <LiveReload />
+        {/* ✅ 自动 SEO meta */}
+        <Meta />
+        <Links />
+        <GlobalStyle />
+      </head>
 
-      {/* ✅ Judge.me 评论系统全局脚本（Hydrogen 兼容写法） */}
-      <script
-        async
-        id="judgeme_shopify_script"
-        type="text/javascript"
-        src="https://cdn.judge.me/shopify_v2.js"
-      ></script>
-
-      <script
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: `
-            window.jdgm = window.jdgm || {};
-            window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
-            window.jdgm.PLATFORM = "hydrogen";
-            window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
-            console.log("✅ Judge.me initialized for:", window.jdgm.SHOP_DOMAIN);
-          `,
-        }}
-      />
-    </body>
-
+      <body
         style={
           {
             opacity: 0,
@@ -196,9 +168,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
         ) : (
           children
         )}
+
         <GlobalLoading />
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
+
+        {/* ✅ Judge.me 评论系统全局脚本（Hydrogen 兼容写法） */}
+        <script
+          async
+          id="judgeme_shopify_script"
+          type="text/javascript"
+          src="https://cdn.judge.me/shopify_v2.js"
+        ></script>
+
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.jdgm = window.jdgm || {};
+              window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
+              window.jdgm.PLATFORM = "hydrogen";
+              window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
+              console.log("✅ Judge.me initialized for:", window.jdgm.SHOP_DOMAIN);
+            `,
+          }}
+        />
       </body>
     </html>
   );
