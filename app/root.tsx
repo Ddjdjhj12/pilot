@@ -125,34 +125,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
         {/* ✅ favicon */}
         <link rel="icon" type="image/png" href="/favicon1.png" />
 
-        {/* ✅ 自动 SEO meta */}
-        <Meta />
-        <Links />
-        <GlobalStyle />
+           {/* ✅ 自动 SEO meta */}
+      <Meta />
+      <Links />
+      <GlobalStyle />
+    </head>
+    <body>
+      <Outlet />
+      <ScrollRestoration />
+      <Scripts />
+      <LiveReload />
 
-        {/* ✅ Judge.me 评论系统全局脚本 */}
-        <script
-          async
-          id="judgeme_shopify_script"
-          type="text/javascript"
-          src="https://cdn.judge.me/shopify_v2.js"
-        ></script>
+      {/* ✅ Judge.me 评论系统全局脚本（Hydrogen 兼容写法） */}
+      <script
+        async
+        id="judgeme_shopify_script"
+        type="text/javascript"
+        src="https://cdn.judge.me/shopify_v2.js"
+      ></script>
 
-        <script
-          type="text/javascript"
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.jdgm = window.jdgm || {};
-              // ⚙️ 替换为你 Hydrogen 连接的商店域名（Shopify Dev 或自定义）
-              window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
-              window.jdgm.PLATFORM = "hydrogen";
-              window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
-            `,
-          }}
-        ></script>
-      </head>
+      <script
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.jdgm = window.jdgm || {};
+            window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
+            window.jdgm.PLATFORM = "hydrogen";
+            window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
+            console.log("✅ Judge.me initialized for:", window.jdgm.SHOP_DOMAIN);
+          `,
+        }}
+      />
+    </body>
 
-      <body
         style={
           {
             opacity: 0,
