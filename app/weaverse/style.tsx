@@ -37,6 +37,7 @@ export function GlobalStyle() {
       headingBaseLineHeight,
       navHeightDesktop,
       navHeightTablet,
+      navHeightMobile,
       pageWidth,
     } = settings;
 
@@ -48,8 +49,16 @@ export function GlobalStyle() {
           __html: `
             :root {
               /* Layout */
-              --height-nav: ${settings.navHeightMobile}rem;
+              --height-nav: ${navHeightMobile || 4.5}rem;
               --page-width: ${pageWidth}px;
+
+              /* Global Font */
+              --font-family-base: 'Cabin Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                                  Roboto, Helvetica, Arial, sans-serif;
+              --font-weight-regular: 400;
+              --font-weight-semibold: 600;
+              --font-letter-spacing: 0.02em;
+              --font-line-height: 1.6;
 
               /* Colors (general) */
               --color-background: ${colorBackground};
@@ -62,18 +71,18 @@ export function GlobalStyle() {
               /* Colors (header & footer) */
               --color-topbar-text: ${topbarTextColor};
               --color-topbar-bg: ${topbarBgColor};
-              --color-header-bg: ${headerBgColor};
-              --color-header-text: ${headerText};
-              --color-transparent-header-text: ${transparentHeaderText};
-              --color-footer-bg: ${footerBgColor};
-              --color-footer-text: ${footerText};
+              --color-header-bg: ${headerBgColor || "#ffffff"};
+              --color-header-text: ${headerText || "#2a2a2a"};
+              --color-transparent-header-text: ${transparentHeaderText || "#ffffff"};
+              --color-footer-bg: ${footerBgColor || "#8B1C1C"};
+              --color-footer-text: ${footerText || "#ffffff"};
 
               /* Colors (buttons & links) */
-              --btn-primary-bg: ${buttonPrimaryBg};
-              --btn-primary-text: ${buttonPrimaryColor};
-              --btn-secondary-bg: ${buttonSecondaryBg};
-              --btn-secondary-text: ${buttonSecondaryColor};
-              --btn-outline-text: ${buttonOutlineTextAndBorder};
+              --btn-primary-bg: ${buttonPrimaryBg || "#8B1C1C"};
+              --btn-primary-text: ${buttonPrimaryColor || "#ffffff"};
+              --btn-secondary-bg: ${buttonSecondaryBg || "#f3f3f3"};
+              --btn-secondary-text: ${buttonSecondaryColor || "#2a2a2a"};
+              --btn-outline-text: ${buttonOutlineTextAndBorder || "#8B1C1C"};
 
               /* Colors (product) */
               --color-compare-price-text: ${comparePriceTextColor};
@@ -88,35 +97,56 @@ export function GlobalStyle() {
               --body-base-size: ${bodyBaseSize}px;
               --body-base-spacing: ${bodyBaseSpacing};
               --body-base-line-height: ${bodyBaseLineHeight};
+              --heading-base-spacing: ${headingBaseSpacing};
+              --heading-base-line-height: ${headingBaseLineHeight};
 
+              /* Heading scale */
               --heading-scale-ratio: 1.2;
               --heading-mobile-scale-ratio: 1.1;
 
               --h1-base-size: ${h1BaseSize}px;
-              --h2-base-size: round(calc(var(--h1-base-size) / var(--heading-scale-ratio)), 1px);
-              --h3-base-size: round(calc(var(--h2-base-size) / var(--heading-scale-ratio)), 1px);
-              --h4-base-size: round(calc(var(--h3-base-size) / var(--heading-scale-ratio)), 1px);
-              --h5-base-size: round(calc(var(--h4-base-size) / var(--heading-scale-ratio)), 1px);
-              --h6-base-size: round(calc(var(--h5-base-size) / var(--heading-scale-ratio)), 1px);
+              --h2-base-size: calc(var(--h1-base-size) / var(--heading-scale-ratio));
+              --h3-base-size: calc(var(--h2-base-size) / var(--heading-scale-ratio));
+              --h4-base-size: calc(var(--h3-base-size) / var(--heading-scale-ratio));
+              --h5-base-size: calc(var(--h4-base-size) / var(--heading-scale-ratio));
+              --h6-base-size: calc(var(--h5-base-size) / var(--heading-scale-ratio));
 
-              --h1-mobile-size: round(calc(var(--h1-base-size) / var(--heading-mobile-scale-ratio)), 1px);
-              --h2-mobile-size: round(calc(var(--h2-base-size) / var(--heading-mobile-scale-ratio)), 1px);
-              --h3-mobile-size: round(calc(var(--h3-base-size) / var(--heading-mobile-scale-ratio)), 1px);
-              --h4-mobile-size: round(calc(var(--h4-base-size) / var(--heading-mobile-scale-ratio)), 1px);
-              --h5-mobile-size: round(calc(var(--h5-base-size) / var(--heading-mobile-scale-ratio)), 1px);
-              --h6-mobile-size: round(calc(var(--h6-base-size) / var(--heading-mobile-scale-ratio)), 1px);
+              /* Red theme accent (Entropy Bright brand) */
+              --brand-accent: #8B1C1C;
+            }
 
-              --heading-base-spacing: ${headingBaseSpacing};
-              --heading-base-line-height: ${headingBaseLineHeight};
+            /* Base typography styling */
+            body {
+              font-family: var(--font-family-base);
+              font-weight: var(--font-weight-regular);
+              line-height: var(--font-line-height);
+              letter-spacing: var(--font-letter-spacing);
+              color: var(--color-text);
+              background-color: var(--color-background);
+            }
 
+            h1, h2, h3, h4, h5, h6 {
+              font-weight: var(--font-weight-semibold);
+              letter-spacing: 0.01em;
+            }
+
+            a {
+              color: var(--brand-accent);
+              text-decoration: none;
+            }
+            a:hover {
+              text-decoration: underline;
+            }
+
+            /* Responsive Navigation Heights */
             @media (min-width: 32em) {
               body {
-                --height-nav: ${navHeightTablet}rem;
+                --height-nav: ${navHeightTablet || 4.5}rem;
               }
             }
             @media (min-width: 48em) {
               body {
-                --height-nav: ${navHeightDesktop}rem;
+                --height-nav: ${navHeightDesktop || 4.5}rem;
               }
             }
           `,
