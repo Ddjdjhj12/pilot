@@ -3,7 +3,7 @@ import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
 import { Analytics, getSeoMeta, useNonce } from "@shopify/hydrogen";
-import { Link } from "react-router";
+import { Link } from "react-router"; // ✅ 修正 Hydrogen 官方兼容导入
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -36,15 +36,7 @@ import styles from "./styles/app.css?url";
 import { DEFAULT_LOCALE } from "./utils/const";
 import { loadCriticalData, loadDeferredData } from "./utils/root.server";
 import { GlobalStyle } from "./weaverse/style";
-
-/* ✅ 替换为 Phosphor Icons */
-import {
-  House,
-  SquaresFour,
-  MagnifyingGlass,
-  ShoppingCartSimple,
-  User,
-} from "@phosphor-icons/react";
+import { Home, Search, ShoppingCart, User, Grid } from "lucide-react";
 
 export type RootLoader = typeof loader;
 
@@ -135,18 +127,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <GlobalStyle />
-
-        {/* ✅ 全局样式 */}
         <style>{`
+          /* ✅ 全站字体系统 */
           body {
             font-family: "Cabin Variable", sans-serif;
             font-weight: 400;
             color: #1a1a1a;
             letter-spacing: 0.01em;
+            line-height: 1.6;
           }
           h1, h2, h3, h4, h5 {
             font-weight: 600;
+            letter-spacing: 0.02em;
           }
+
+          /* ✅ Header 样式（品牌红） */
           header {
             background-color: #9E2B1E !important;
             height: 72px !important;
@@ -155,11 +150,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             justify-content: space-between;
             padding: 0 16px;
           }
+          header img {
+            height: 36px;
+          }
           header svg {
             color: white !important;
           }
 
-          /* ✅ 移动端底部导航栏 */
+          /* ✅ Mobile Footer 样式 */
           .mobile-nav {
             position: fixed;
             bottom: 0;
@@ -179,10 +177,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
             align-items: center;
             font-size: 12px;
             color: #333;
+            text-decoration: none;
           }
           .mobile-nav svg {
             width: 22px;
             height: 22px;
+          }
+
+          /* ✅ 仅在移动端显示 */
+          @media (min-width: 768px) {
+            .mobile-nav {
+              display: none !important;
+            }
           }
         `}</style>
       </head>
@@ -194,7 +200,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             "--initial-topbar-height": `${topbarText ? topbarHeight : 0}px`,
           } as CSSProperties
         }
-        className="bg-background text-body antialiased opacity-100! transition-opacity duration-300 pb-16 lg:pb-0"
+        className="bg-background text-body antialiased opacity-100! transition-opacity duration-300"
       >
         {data ? (
           <Analytics.Provider
@@ -214,31 +220,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </main>
                 <Footer />
               </div>
-              {shouldShowNewsletterPopup && <NewsletterPopup />}
 
-              {/* ✅ 移动底部导航 */}
-              <nav className="mobile-nav lg:hidden">
+              {/* ✅ 底部导航栏：仅移动端显示 */}
+              <nav className="mobile-nav">
                 <Link to="/">
-                  <House size={22} weight="duotone" />
+                  <Home />
                   <span>Home</span>
                 </Link>
                 <Link to="/collections">
-                  <SquaresFour size={22} weight="duotone" />
+                  <Grid />
                   <span>Menu</span>
                 </Link>
                 <Link to="/search">
-                  <MagnifyingGlass size={22} weight="duotone" />
+                  <Search />
                   <span>Search</span>
                 </Link>
                 <Link to="/cart">
-                  <ShoppingCartSimple size={22} weight="duotone" />
+                  <ShoppingCart />
                   <span>Cart</span>
                 </Link>
                 <Link to="/account">
-                  <User size={22} weight="duotone" />
+                  <User />
                   <span>Account</span>
                 </Link>
               </nav>
+
+              {shouldShowNewsletterPopup && <NewsletterPopup />}
             </TooltipProvider>
             <CustomAnalytics />
           </Analytics.Provider>
@@ -257,6 +264,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           type="text/javascript"
           src="https://cdn.judge.me/shopify_v2.js"
         ></script>
+
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
@@ -265,7 +273,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
               window.jdgm.SHOP_DOMAIN = "cf30b9-d4.myshopify.com";
               window.jdgm.PLATFORM = "hydrogen";
               window.jdgm.PUBLIC_TOKEN = "7KoNZxek3nZ982H_Cv-YjduopSE";
-              console.log("✅ Judge.me initialized for:", window.jdgm.SHOP_DOMAIN);
             `,
           }}
         />
@@ -275,5 +282,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default withWeaverse(App);
+
 
 
