@@ -29,8 +29,8 @@ const variants = cva("", {
     },
     padding: {
       full: "",
-      stretch: "px-3 md:px-10 lg:px-16",
-      fixed: "mx-auto px-3 md:px-4 lg:px-6",
+      stretch: "px-4 md:px-10 lg:px-16",
+      fixed: "mx-auto px-4 md:px-6 lg:px-8",
     },
   },
 });
@@ -55,53 +55,50 @@ export function Header() {
   return (
     <header
       className={cn(
-        "z-10 w-full",
-        "transition-all duration-300 ease-in-out",
-        "bg-(--color-header-bg) hover:bg-(--color-header-bg)",
-        "text-(--color-header-text) hover:text-(--color-header-text)",
-        "border-line-subtle border-b",
+        "z-30 w-full transition-all duration-300 ease-in-out border-b border-gray-200",
+        "bg-white text-gray-800",
+        "shadow-none hover:shadow-sm",
+        "sticky top-0",
         variants({ padding: headerWidth }),
-        scrolled ? "shadow-header" : "shadow-none",
-        enableTransparent
-          ? [
-              "group/header fixed w-screen",
-              "top-(--topbar-height,var(--initial-topbar-height))",
-            ]
-          : "sticky top-0",
-        isTransparent
-          ? [
-              "border-transparent bg-transparent",
-              "text-(--color-transparent-header-text)",
-              "[&_.cart-count]:text-(--color-header-text)",
-              "[&_.cart-count]:bg-(--color-transparent-header-text)",
-              "hover:[&_.cart-count]:bg-(--color-header-text)",
-              "hover:[&_.cart-count]:text-(--color-transparent-header-text)",
-              "[&_.main-logo]:opacity-0 hover:[&_.main-logo]:opacity-100",
-              "[&_.transparent-logo]:opacity-100 hover:[&_.transparent-logo]:opacity-0",
-            ]
-          : [
-              "[&_.cart-count]:text-(--color-header-bg)",
-              "[&_.cart-count]:bg-(--color-header-text)",
-              "[&_.main-logo]:opacity-100",
-              "[&_.transparent-logo]:opacity-0",
-            ],
+        scrolled && "shadow-md",
+        enableTransparent && [
+          "group/header fixed w-screen",
+          "top-(--topbar-height,var(--initial-topbar-height))",
+        ],
+        isTransparent && [
+          "bg-transparent border-transparent text-white",
+          "hover:text-gray-100",
+        ]
       )}
+      style={{ height: "72px" }}
     >
       <div
         className={cn(
-          "flex h-(--height-nav) items-center justify-between gap-2 py-1.5 lg:gap-8 lg:py-3",
-          variants({ width: headerWidth }),
+          "flex h-full items-center justify-between gap-2 lg:gap-8",
+          variants({ width: headerWidth })
         )}
       >
-        <MobileMenu />
-        <Link to="/search" className="p-1.5 lg:hidden">
-          <MagnifyingGlassIcon className="h-5 w-5" />
-        </Link>
+        {/* 左侧菜单与移动端搜索 */}
+        <div className="flex items-center gap-2">
+          <MobileMenu />
+          <Link
+            to="/search"
+            className="p-2 text-gray-700 hover:text-[#8B1C1C] transition-colors lg:hidden"
+          >
+            <MagnifyingGlassIcon className="h-5 w-5" />
+          </Link>
+        </div>
+
+        {/* 中间 Logo */}
         <Logo />
+
+        {/* 桌面菜单 */}
         <DesktopMenu />
-        <div className="z-1 flex items-center gap-1">
+
+        {/* 右侧功能按钮 */}
+        <div className="flex items-center gap-3">
           <PredictiveSearchButton />
-          <AccountLink className="relative flex h-8 w-8 items-center justify-center" />
+          <AccountLink className="relative flex h-8 w-8 items-center justify-center hover:text-[#8B1C1C]" />
           <CartDrawer />
         </div>
       </div>
@@ -120,13 +117,7 @@ function AccountLink({ className }: { className?: string }) {
           resolve={isLoggedIn}
           errorElement={<UserIcon className="h-5 w-5" />}
         >
-          {(loggedIn) =>
-            loggedIn ? (
-              <UserIcon className="h-5 w-5" />
-            ) : (
-              <UserIcon className="h-5 w-5" />
-            )
-          }
+          {(loggedIn) => <UserIcon className="h-5 w-5" />}
         </Await>
       </Suspense>
     </Link>
