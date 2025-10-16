@@ -3,6 +3,7 @@ import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
 import { Analytics, getSeoMeta, useNonce, Link } from "@shopify/hydrogen";
+import { Link } from "react-router-dom";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
