@@ -1,8 +1,8 @@
-// Supports weights 400-700
+// Supports weights 400–700
 import "@fontsource-variable/cabin";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import type { SeoConfig } from "@shopify/hydrogen";
-import { Analytics, getSeoMeta, useNonce } from "@shopify/hydrogen";
+import { Analytics, getSeoMeta, useNonce, Link } from "@shopify/hydrogen";
 import type {
   LinksFunction,
   LoaderFunctionArgs,
@@ -35,8 +35,15 @@ import styles from "./styles/app.css?url";
 import { DEFAULT_LOCALE } from "./utils/const";
 import { loadCriticalData, loadDeferredData } from "./utils/root.server";
 import { GlobalStyle } from "./weaverse/style";
-import { Home, Search, ShoppingCart, User, Grid } from "lucide-react";
-import { Link } from "@shopify/hydrogen";
+
+/* ✅ 替换为 Phosphor Icons */
+import {
+  House,
+  SquaresFour,
+  MagnifyingGlass,
+  ShoppingCartSimple,
+  User,
+} from "@phosphor-icons/react";
 
 export type RootLoader = typeof loader;
 
@@ -127,8 +134,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
         <GlobalStyle />
+
+        {/* ✅ 全局样式 */}
         <style>{`
-          /* 全站字体系统 */
           body {
             font-family: "Cabin Variable", sans-serif;
             font-weight: 400;
@@ -138,8 +146,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
           h1, h2, h3, h4, h5 {
             font-weight: 600;
           }
-
-          /* Header 样式（品牌红色） */
           header {
             background-color: #9E2B1E !important;
             height: 72px !important;
@@ -148,14 +154,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
             justify-content: space-between;
             padding: 0 16px;
           }
-          header img {
-            height: 36px;
-          }
           header svg {
             color: white !important;
           }
 
-          /* 底部导航栏样式 */
+          /* ✅ 移动端底部导航栏 */
           .mobile-nav {
             position: fixed;
             bottom: 0;
@@ -190,7 +193,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             "--initial-topbar-height": `${topbarText ? topbarHeight : 0}px`,
           } as CSSProperties
         }
-        className="bg-background text-body antialiased opacity-100! transition-opacity duration-300"
+        className="bg-background text-body antialiased opacity-100! transition-opacity duration-300 pb-16 lg:pb-0"
       >
         {data ? (
           <Analytics.Provider
@@ -211,26 +214,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Footer />
               </div>
               {shouldShowNewsletterPopup && <NewsletterPopup />}
-              {/* ✅ 底部导航栏 */}
-              <nav className="mobile-nav">
+
+              {/* ✅ 移动底部导航 */}
+              <nav className="mobile-nav lg:hidden">
                 <Link to="/">
-                  <Home />
+                  <House size={22} weight="duotone" />
                   <span>Home</span>
                 </Link>
                 <Link to="/collections">
-                  <Grid />
+                  <SquaresFour size={22} weight="duotone" />
                   <span>Menu</span>
                 </Link>
                 <Link to="/search">
-                  <Search />
+                  <MagnifyingGlass size={22} weight="duotone" />
                   <span>Search</span>
                 </Link>
                 <Link to="/cart">
-                  <ShoppingCart />
+                  <ShoppingCartSimple size={22} weight="duotone" />
                   <span>Cart</span>
                 </Link>
                 <Link to="/account">
-                  <User />
+                  <User size={22} weight="duotone" />
                   <span>Account</span>
                 </Link>
               </nav>
@@ -245,14 +249,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
 
-        {/* ✅ Judge.me 评论系统全局脚本（Hydrogen 兼容写法） */}
+        {/* ✅ Judge.me 评论系统 */}
         <script
           async
           id="judgeme_shopify_script"
           type="text/javascript"
           src="https://cdn.judge.me/shopify_v2.js"
         ></script>
-
         <script
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
@@ -271,4 +274,5 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default withWeaverse(App);
+
 
