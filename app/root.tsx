@@ -35,6 +35,8 @@ import styles from "./styles/app.css?url";
 import { DEFAULT_LOCALE } from "./utils/const";
 import { loadCriticalData, loadDeferredData } from "./utils/root.server";
 import { GlobalStyle } from "./weaverse/style";
+import { Home, Search, ShoppingCart, User, Grid } from "lucide-react";
+import { Link } from "@shopify/hydrogen";
 
 export type RootLoader = typeof loader;
 
@@ -122,11 +124,63 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <link rel="stylesheet" href={styles} />
         <link rel="icon" type="image/png" href="/favicon1.png" />
-
-        {/* ✅ 自动 SEO meta */}
         <Meta />
         <Links />
         <GlobalStyle />
+        <style>{`
+          /* 全站字体系统 */
+          body {
+            font-family: "Cabin Variable", sans-serif;
+            font-weight: 400;
+            color: #1a1a1a;
+            letter-spacing: 0.01em;
+          }
+          h1, h2, h3, h4, h5 {
+            font-weight: 600;
+          }
+
+          /* Header 样式（品牌红色） */
+          header {
+            background-color: #9E2B1E !important;
+            height: 72px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+          }
+          header img {
+            height: 36px;
+          }
+          header svg {
+            color: white !important;
+          }
+
+          /* 底部导航栏样式 */
+          .mobile-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e5e5;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 6px 0;
+            z-index: 50;
+          }
+          .mobile-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+          }
+          .mobile-nav svg {
+            width: 22px;
+            height: 22px;
+          }
+        `}</style>
       </head>
 
       <body
@@ -149,11 +203,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 className="flex min-h-screen flex-col"
                 key={`${locale.language}-${locale.country}`}
               >
-                <div>
-                  <a href="#mainContent" className="sr-only">
-                    Skip to content
-                  </a>
-                </div>
                 <ScrollingAnnouncement />
                 <Header />
                 <main id="mainContent" className="grow">
@@ -162,6 +211,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <Footer />
               </div>
               {shouldShowNewsletterPopup && <NewsletterPopup />}
+              {/* ✅ 底部导航栏 */}
+              <nav className="mobile-nav">
+                <Link to="/">
+                  <Home />
+                  <span>Home</span>
+                </Link>
+                <Link to="/collections">
+                  <Grid />
+                  <span>Menu</span>
+                </Link>
+                <Link to="/search">
+                  <Search />
+                  <span>Search</span>
+                </Link>
+                <Link to="/cart">
+                  <ShoppingCart />
+                  <span>Cart</span>
+                </Link>
+                <Link to="/account">
+                  <User />
+                  <span>Account</span>
+                </Link>
+              </nav>
             </TooltipProvider>
             <CustomAnalytics />
           </Analytics.Provider>
@@ -199,3 +271,4 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default withWeaverse(App);
+
