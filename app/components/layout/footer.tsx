@@ -1,3 +1,4 @@
+// ✅ app/components/layout/footer.tsx
 import {
   CaretRightIcon,
   FacebookLogoIcon,
@@ -18,6 +19,7 @@ import type { SingleMenuItem } from "~/types/menu";
 import { cn } from "~/utils/cn";
 import Link from "../link";
 import { CountrySelector } from "./country-selector";
+import React from "react";
 
 const variants = cva("", {
   variants: {
@@ -56,7 +58,7 @@ export function Footer() {
   } = useThemeSettings();
   const fetcher = useFetcher<{ ok: boolean; error: string }>();
 
-  // Compute message and error from fetcher data
+  // ✅ 处理订阅消息
   const message = fetcher.data?.ok ? "Thank you for signing up! 🎉" : "";
   const error =
     fetcher.data && !fetcher.data.ok
@@ -99,8 +101,10 @@ export function Footer() {
           variants({ width: footerWidth }),
         )}
       >
+        {/* ✅ 顶部三列内容 */}
         <div className="space-y-9">
           <div className="grid w-full gap-8 lg:grid-cols-3">
+            {/* 左列：Logo + 简介 + 社交链接 */}
             <div className="flex flex-col gap-6">
               {footerLogoData ? (
                 <div className="relative" style={{ width: footerLogoWidth }}>
@@ -130,6 +134,8 @@ export function Footer() {
                 ))}
               </div>
             </div>
+
+            {/* 中列：地址 */}
             <div className="flex flex-col gap-6">
               <div className="text-base">{addressTitle}</div>
               <div className="space-y-2">
@@ -137,6 +143,8 @@ export function Footer() {
                 <p>Email: {storeEmail}</p>
               </div>
             </div>
+
+            {/* 右列：订阅表单 */}
             <div className="flex flex-col gap-6">
               <div className="text-base">{newsletterTitle}</div>
               <div className="space-y-2">
@@ -179,11 +187,15 @@ export function Footer() {
               </div>
             </div>
           </div>
+
+          {/* ✅ 底部菜单 */}
           <FooterMenu />
         </div>
+
+        {/* ✅ 版权 & 货币选择器 */}
         <div className="flex flex-col items-center justify-between gap-4 py-9 lg:flex-row">
           <div className="flex gap-2">
-            <CountrySelector />
+            <CurrencySelectorEnhanced />
           </div>
           <p>{copyright}</p>
         </div>
@@ -192,6 +204,42 @@ export function Footer() {
   );
 }
 
+/* ✅ 加强版 CurrencySelector：支持 fallback 多币种 */
+function CurrencySelectorEnhanced() {
+  // 原始选择器
+  const ShopifyCountrySelector = CountrySelector;
+
+  // 手动追加 fallback 币种
+  const fallbackCurrencies = [
+    { isoCode: "USD", symbol: "$", name: "United States (USD $)" },
+    { isoCode: "EUR", symbol: "€", name: "Germany (EUR €)" },
+    { isoCode: "CNY", symbol: "¥", name: "China (CNY ¥)" },
+    { isoCode: "AUD", symbol: "$", name: "Australia (AUD $)" },
+    { isoCode: "CAD", symbol: "$", name: "Canada (CAD $)" },
+    { isoCode: "GBP", symbol: "£", name: "United Kingdom (GBP £)" },
+  ];
+
+  // ✅ 显示 Shopify 原生 + fallback
+  return (
+    <div className="relative flex flex-col items-center text-sm">
+      <ShopifyCountrySelector />
+      <select
+        className="mt-2 w-full border border-gray-200 bg-white px-3 py-2 text-black shadow-sm focus:border-gray-400 focus:outline-none lg:hidden"
+        onChange={(e) =>
+          alert(`Currency switched to ${e.target.value} (for demo)`)
+        }
+      >
+        {fallbackCurrencies.map((c) => (
+          <option key={c.isoCode} value={c.isoCode}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+/* ✅ Footer 菜单部分（原封不动） */
 function FooterMenu() {
   const { footerMenu } = useShopMenu();
   const items = footerMenu.items as unknown as SingleMenuItem[];
